@@ -2,7 +2,8 @@ package org.mulesoft.salesforce.utilities;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.mulesoft.salesforce.model.SheetData;
+import org.mulesoft.salesforce.api.model.EventStatus;
+import org.mulesoft.salesforce.api.model.SheetData;
 
 import java.io.File;
 import java.io.IOException;
@@ -47,48 +48,51 @@ public class CsvUtil {
                     for (int index = 0; index < rowValues.length; index++) {
                         switch (index) {
                             case 0:
-                                sheetData.setContractNo(getStringCellData(rowValues[index]));
+                                sheetData.setErrors(getStringCellData(rowValues[index]));
                                 break;
                             case 1:
-                                sheetData.setForecastCurrency(getStringCellData(rowValues[index]));
+                                sheetData.setContractNo(getStringCellData(rowValues[index]));
                                 break;
                             case 2:
-                                sheetData.setPropertyDescription(getStringCellData(rowValues[index]));
+                                sheetData.setForecastCurrency(getStringCellData(rowValues[index]));
                                 break;
                             case 3:
-                                sheetData.setProductTypeDescription(getStringCellData(rowValues[index]));
+                                sheetData.setPropertyDescription(getStringCellData(rowValues[index]));
                                 break;
                             case 4:
-                                sheetData.setTerritory(getStringCellData(rowValues[index]));
+                                sheetData.setProductTypeDescription(getStringCellData(rowValues[index]));
                                 break;
                             case 5:
-                                sheetData.setRetailerDescription(getStringCellData(rowValues[index]));
+                                sheetData.setTerritory(getStringCellData(rowValues[index]));
                                 break;
                             case 6:
-                                sheetData.setRevenueType(getStringCellData(rowValues[index]));
+                                sheetData.setRetailerDescription(getStringCellData(rowValues[index]));
                                 break;
                             case 7:
-                                sheetData.setRoyaltyRate(getNumericCellData(rowValues[index]));
+                                sheetData.setRevenueType(getStringCellData(rowValues[index]));
                                 break;
                             case 8:
-                                sheetData.setQ1(getStringCellData(rowValues[index]));
+                                sheetData.setRoyaltyRate(getNumericCellData(rowValues[index]));
                                 break;
                             case 9:
-                                sheetData.setQ2(getStringCellData(rowValues[index]));
+                                sheetData.setQ1(getStringCellData(rowValues[index]));
                                 break;
                             case 10:
-                                sheetData.setQ3(getStringCellData(rowValues[index]));
+                                sheetData.setQ2(getStringCellData(rowValues[index]));
                                 break;
                             case 11:
-                                sheetData.setQ4(getStringCellData(rowValues[index]));
+                                sheetData.setQ3(getStringCellData(rowValues[index]));
                                 break;
                             case 12:
-                                sheetData.setTotalAmount(getNumericCellData(rowValues[index]));
+                                sheetData.setQ4(getStringCellData(rowValues[index]));
                                 break;
                             case 13:
-                                sheetData.setCreatedDate(getStringCellData(rowValues[index]));
+                                sheetData.setTotalAmount(getNumericCellData(rowValues[index]));
                                 break;
                             case 14:
+                                sheetData.setCreatedDate(getStringCellData(rowValues[index]));
+                                break;
+                            case 15:
                                 sheetData.setLastModifiedDate(getStringCellData(rowValues[index]));
                                 break;
                         }
@@ -96,6 +100,33 @@ public class CsvUtil {
                     sheetDataList.add(sheetData);
                 });
         return sheetDataList;
+    }
+
+
+    public static List<EventStatus> getEventStatusData() {
+        List<EventStatus> eventStatuses = new ArrayList<>();
+        allLines.stream()
+                .filter(Objects::nonNull)
+                .skip(1)
+                .forEach(line -> {
+                    String[] rowValues = line.split(",");
+                    EventStatus eventStatus = new EventStatus();
+                    for (int index = 0; index < rowValues.length; index++) {
+                        switch (index) {
+                            case 0:
+                                eventStatus.setMulesoftEventReceived(getStringCellData(rowValues[index]));
+                                break;
+                            case 1:
+                                eventStatus.setMulesoftProcessedOn(getStringCellData(rowValues[index]));
+                                break;
+                            case 2:
+                                eventStatus.setMulesoftProcessedSuccess(getStringCellData(rowValues[index]));
+                                break;
+                                                    }
+                    }
+                    eventStatuses.add(eventStatus);
+                });
+        return eventStatuses;
     }
 
     /**
